@@ -1,0 +1,19 @@
+cvm-version: 0.7.1
+cpus: 4
+memory: 32768
+
+containers:
+  - name: "guardrail"
+    # Image is automatically updated by the GitHub Actions workflow
+    image: "ghcr.io/vitadao/vita-tinfoil-agent-guardrail:latest"
+    env:
+      - PORT: "8000"
+    secrets:
+      - QMD_API_SECRET
+    command: []
+
+shim:
+  upstream-port: 8000
+  paths:
+    - /classify
+    - /health
