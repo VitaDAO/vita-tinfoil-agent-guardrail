@@ -30,8 +30,8 @@ if not API_SECRET:
 
 # Model config — switch to vLLM + GPU model when ready
 MODEL_PATH = os.environ.get("MODEL_PATH", "")
-MODEL_REPO = os.environ.get("MODEL_REPO", "Qwen/Qwen3-4B-Instruct-2507-GGUF")
-MODEL_FILE = os.environ.get("MODEL_FILE", "*q4_k_m*.gguf")
+MODEL_REPO = os.environ.get("MODEL_REPO", "unsloth/Qwen3-4B-Instruct-2507-GGUF")
+MODEL_FILE = os.environ.get("MODEL_FILE", "*Q4_K_M.gguf")
 MAX_MESSAGE_LENGTH = 1000
 
 SYSTEM_PROMPT = """You are a strict input classifier for VITA, a health and longevity AI assistant.
