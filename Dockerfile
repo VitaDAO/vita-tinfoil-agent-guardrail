@@ -1,30 +1,20 @@
-# Stage 1: Build — install native deps
-FROM node:22-bookworm AS builder
+FROM python:3.13-slim-bookworm
 
-RUN apt-get update && apt-get install -y cmake build-essential python3 && rm -rf /var/lib/apt/lists/*
+# Build deps for llama-cpp-python
+RUN apt-get update && apt-get install -y cmake build-essential curl && rm -rf /var/lib/apt/lists/*
 
+# Install Python deps
 WORKDIR /app
-COPY package.json ./
-RUN npm install --omit=dev
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Strip CUDA/Vulkan binaries (CPU-only)
-RUN rm -rf node_modules/@node-llama-cpp/linux-x64-cuda* \
-    && rm -rf node_modules/@node-llama-cpp/linux-x64-vulkan*
+COPY server.py ./
 
-# Stage 2: Runtime — slim image
-FROM node:22-bookworm-slim
-
-RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
-
-WORKDIR /app
-COPY --from=builder /app/node_modules ./node_modules
-COPY package.json server.mjs ./
-
-RUN mkdir -p /home/user/.cache && chown -R node:node /app /home/user
+RUN mkdir -p /home/user/.cache && useradd -m -d /home/user user && chown -R user:user /app /home/user
 
 ENV HOME=/home/user
 
-USER node
+USER user
 EXPOSE 8000
 
-CMD ["node", "/app/server.mjs"]
+CMD ["python", "/app/server.py"]
