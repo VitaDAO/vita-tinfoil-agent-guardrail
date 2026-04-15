@@ -15,7 +15,7 @@ import { getLlama, resolveModelFile, LlamaChatSession } from "node-llama-cpp";
 const PORT = parseInt(process.env.PORT || "8000", 10);
 const API_SECRET = process.env.QMD_API_SECRET || "";
 const MAX_MESSAGE_LENGTH = 1000;
-const MODEL_URI = "hf:Qwen/Qwen3-4B-GGUF:Q4_K_M";
+const MODEL_URI = "hf:llmware/qwen3-4b-instruct-gguf";
 
 // Fail if no API secret — guardrail must not be open
 if (!API_SECRET) {
